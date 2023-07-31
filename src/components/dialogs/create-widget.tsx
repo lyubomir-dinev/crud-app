@@ -14,6 +14,17 @@ import {
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useWidget } from "@/widget-context";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "../ui/form";
 
 export interface CreateWidgetProps {
   widget?: Widget;
@@ -27,76 +38,96 @@ export const CreateWidget = ({ widget }: CreateWidgetProps) => {
   const [stockLevel, setStockLevel] = useState(widget ? widget.stockLevel : 0);
   const { dispatch } = useWidget();
 
+  const formSchema = z.object({
+    name: z.string().min(1, {
+      message: "Name can't be blank",
+    }),
+    manufacturer: z.string().min(1, { message: "Manufacturer can't be blank" }),
+    stockLevel: z.string().min(0),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      manufacturer: "",
+      name: "",
+      stockLevel: "0",
+    },
+  });
+
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant={widget ? "ghost" : "outline"} className="rounded">
-          {widget ? "Edit" : "Create"} Widget
-        </Button>
-      </DialogTrigger>
+      {!widget && (
+        <DialogTrigger asChild>
+          <Button variant={widget ? "ghost" : "outline"} className="rounded">
+            {widget ? "Edit" : "Create"} Widget
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px] border rounded">
         <DialogHeader>
-          <DialogTitle>Widget info</DialogTitle>
+          <DialogTitle>Widget information</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you`re done.
+            Provide the necessary data to {widget ? "update" : "create"} the
+            widget.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              id="name"
-              value={name}
-              className="col-span-3 rounded"
-              onChange={(e) => setName(e.currentTarget.value)}
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Manufacturer
-            </Label>
-            <Input
-              id="manufacturer"
-              value={manufacturer}
-              className="col-span-3 rounded"
-              onChange={(e) => setManufacturer(e.currentTarget.value)}
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Stock level
-            </Label>
-            <Input
-              type="number"
-              id="stockLevel"
-              value={stockLevel}
-              className="col-span-3 rounded"
-              onChange={(e) =>
-                setStockLevel(Number.parseInt(e.currentTarget.value))
-              }
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button
-            type="submit"
-            onClick={() =>
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit((values) => {
               dispatch({
                 payload: {
-                  manufacturer,
-                  name,
-                  stockLevel,
+                  ...values,
                   id: widget ? widget.id : uuidv4(),
                 },
                 type: widget ? "update" : "create",
-              })
-            }
+              });
+              form.reset();
+            })}
+            className="space-y-8"
           >
-            Submit widget
-          </Button>
-        </DialogFooter>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Widget" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="manufacturer"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Manufacturer</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="stockLevel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Stock level</FormLabel>
+                  <FormControl>
+                    <Input placeholder="0" {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );

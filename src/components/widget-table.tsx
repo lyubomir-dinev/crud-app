@@ -13,10 +13,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-// import { ArrowUpDown, ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-// import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -44,7 +44,7 @@ export const columns: ColumnDef<Widget>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
-          {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -61,7 +61,7 @@ export const columns: ColumnDef<Widget>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Manufacturer
-          {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -78,7 +78,7 @@ export const columns: ColumnDef<Widget>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Stock level
-          {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -97,36 +97,37 @@ export const columns: ColumnDef<Widget>[] = [
       const widget = row.original;
       return (
         <WidgetConsumer>
-          {({ dispatch }) => (
-            <>
-              <div className=" gap-2 hidden group-hover:flex">
-                <Button
-                  className="cursor-pointer"
-                  onClick={() =>
-                    dispatch({
-                      payload: widget,
-                      type: "triggerUpdate",
-                    })
-                  }
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="destructive"
-                  className="cursor-pointer"
-                  onClick={() => {
-                    console.log("triggerDelete");
-                    dispatch({
-                      payload: widget,
-                      type: "triggerDelete",
-                    });
-                  }}
-                >
-                  Delete
-                </Button>
-              </div>
-            </>
-          )}
+          {({ dispatch }) => {
+            return (
+              <>
+                <div className=" gap-2 hidden group-hover:flex">
+                  <Badge
+                    className="cursor-pointer"
+                    onClick={() => {
+                      dispatch({
+                        payload: widget,
+                        type: "triggerUpdate",
+                      });
+                    }}
+                  >
+                    Edit
+                  </Badge>
+                  <Badge
+                    variant="destructive"
+                    className="cursor-pointer"
+                    onClick={() => {
+                      dispatch({
+                        payload: widget,
+                        type: "triggerDelete",
+                      });
+                    }}
+                  >
+                    Delete
+                  </Badge>
+                </div>
+              </>
+            );
+          }}
         </WidgetConsumer>
       );
     },
@@ -169,7 +170,7 @@ export const WidgetTable = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
               Columns
-              {/* <ChevronDown className="ml-2 h-4 w-4" /> */}
+              <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

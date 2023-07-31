@@ -76,10 +76,8 @@ function widgetReducer(
         widgets: state.widgets.filter((w) => w.id != action.payload.id),
       };
     case "triggerDelete":
-      console.log("triggerDelete", state);
       return { ...state, selectedWidget: action.payload, action: "deleting" };
     case "triggerUpdate":
-      console.log("triggerUpdate", state);
       return { ...state, selectedWidget: action.payload, action: "updating" };
     case "cancelDelete":
     case "cancelUpdate":
