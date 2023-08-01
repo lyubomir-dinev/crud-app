@@ -5,24 +5,24 @@ export type Widget = {
   stockLevel: number;
 };
 
+export type Widgets = Widget[];
+
 export type WidgetDispatchActionType =
+  | "init"
   | "create"
   | "update"
   | "delete"
-  | "triggerUpdate"
-  | "triggerDelete"
-  | "cancelUpdate"
-  | "cancelDelete";
+  | "widgetSelected"
+  | "widgetDeselected";
 
 export type WidgetDispatchAction = {
   type: WidgetDispatchActionType;
-  payload: Widget;
+  payload: Widget | Widgets;
 };
 
 export type WidgetDispatch = (action: WidgetDispatchAction) => void;
 
 export type WidgetState = {
-  widgets: Widget[];
+  widgets: Widgets;
   selectedWidget?: Widget;
-  action?: "updating" | "deleting";
 };

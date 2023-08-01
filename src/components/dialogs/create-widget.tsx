@@ -1,4 +1,3 @@
-import { Widget } from "@/types";
 import {
   Dialog,
   DialogTrigger,
@@ -7,11 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  Label,
   Input,
-  DialogFooter,
 } from "..";
-import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useWidget } from "@/widget-context";
 import { FormProvider, useForm } from "react-hook-form";
@@ -22,20 +18,10 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
 } from "../ui/form";
 
-export interface CreateWidgetProps {
-  widget?: Widget;
-}
-
-export const CreateWidget = ({ widget }: CreateWidgetProps) => {
-  const [name, setName] = useState(widget ? widget.name : "");
-  const [manufacturer, setManufacturer] = useState(
-    widget ? widget.manufacturer : ""
-  );
-  const [stockLevel, setStockLevel] = useState(widget ? widget.stockLevel : 0);
+export const CreateWidget = () => {
   const { dispatch } = useWidget();
 
   const formSchema = z.object({
@@ -57,19 +43,16 @@ export const CreateWidget = ({ widget }: CreateWidgetProps) => {
 
   return (
     <Dialog>
-      {!widget && (
-        <DialogTrigger asChild>
-          <Button variant={widget ? "ghost" : "outline"} className="rounded">
-            {widget ? "Edit" : "Create"} Widget
-          </Button>
-        </DialogTrigger>
-      )}
+      <DialogTrigger asChild>
+        <Button variant={"outline"} className="rounded">
+          Create Widget
+        </Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] border rounded">
         <DialogHeader>
           <DialogTitle>Widget information</DialogTitle>
           <DialogDescription>
-            Provide the necessary data to {widget ? "update" : "create"} the
-            widget.
+            Provide the necessary data to create the widget.
           </DialogDescription>
         </DialogHeader>
         <FormProvider {...form}>
@@ -78,9 +61,10 @@ export const CreateWidget = ({ widget }: CreateWidgetProps) => {
               dispatch({
                 payload: {
                   ...values,
-                  id: widget ? widget.id : uuidv4(),
+                  stockLevel: Number.parseInt(values.stockLevel),
+                  id: uuidv4(),
                 },
-                type: widget ? "update" : "create",
+                type: "create",
               });
               form.reset();
             })}

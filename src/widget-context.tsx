@@ -1,49 +1,12 @@
-import {
-  useReducer,
-  createContext,
-  useContext,
-  ReactNode,
-  Context,
-} from "react";
+import { useReducer, createContext, useContext, ReactNode } from "react";
 import {
   WidgetState,
   WidgetDispatchAction,
   WidgetDispatch,
   Widget,
+  Widgets,
 } from "./types";
-
-const data: Widget[] = [
-  {
-    id: "m5gr84i9",
-    stockLevel: 316,
-    name: "Optimus Prime",
-    manufacturer: "Hardhead",
-  },
-  {
-    id: "3u1reuv4",
-    stockLevel: 242,
-    name: "Peacemaker",
-    manufacturer: "Shockwave",
-  },
-  {
-    id: "derv1ws0",
-    stockLevel: 837,
-    name: "Predaking",
-    manufacturer: "Krunk",
-  },
-  {
-    id: "5kma53ae",
-    stockLevel: 874,
-    name: "Chop Shop",
-    manufacturer: "Sinnertwin",
-  },
-  {
-    id: "bhqecj4p",
-    stockLevel: 721,
-    name: "Downshift",
-    manufacturer: "Hot Rod",
-  },
-];
+import { api } from "./store";
 
 export const WidgetContext = createContext<
   | {
@@ -58,30 +21,44 @@ function widgetReducer(
   action: WidgetDispatchAction
 ): WidgetState {
   switch (action.type) {
+    case "init":
+      return {
+        ...state,
+        widgets: action.payload as Widgets,
+      };
     case "create":
-      //TODO: make the API call to CREATE the widget in the DB using the payload
-      return { ...state, widgets: [...state.widgets, action.payload] };
+      api.createWidget(action.payload as Widget);
+      return {
+        ...state,
+        widgets: [...state.widgets, action.payload as Widget],
+      };
     case "update":
-      //TODO: make the API call to UPDATE the widget in the DB based on the payload
+      api.updateWidget(action.payload as Widget);
       return {
         ...state,
         widgets: state.widgets.map((w) =>
-          w.id == action.payload.id ? action.payload : w
+          w.id == (action.payload as Widget).id ? (action.payload as Widget) : w
         ),
+        selectedWidget: action.payload as Widget,
       };
     case "delete":
-      //TODO: make the API call to DELETE the widget from the DB
+      api.deleteWidget(action.payload as Widget);
       return {
         ...state,
-        widgets: state.widgets.filter((w) => w.id != action.payload.id),
+        widgets: state.widgets.filter(
+          (w) => w.id != (action.payload as Widget).id
+        ),
       };
-    case "triggerDelete":
-      return { ...state, selectedWidget: action.payload, action: "deleting" };
-    case "triggerUpdate":
-      return { ...state, selectedWidget: action.payload, action: "updating" };
-    case "cancelDelete":
-    case "cancelUpdate":
-      return { widgets: state.widgets };
+    case "widgetSelected":
+      return {
+        ...state,
+        selectedWidget: action.payload as Widget,
+      };
+    case "widgetDeselected":
+      return {
+        ...state,
+        selectedWidget: undefined,
+      };
   }
 }
 
@@ -90,7 +67,7 @@ type WidgetProviderProps = {
 };
 
 function WidgetProvider({ children }: WidgetProviderProps) {
-  const [state, dispatch] = useReducer(widgetReducer, { widgets: data });
+  const [state, dispatch] = useReducer(widgetReducer, { widgets: [] });
 
   const value = { state, dispatch };
 

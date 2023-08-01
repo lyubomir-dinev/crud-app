@@ -18,12 +18,6 @@ import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Table,
   TableBody,
   TableCell,
@@ -33,8 +27,37 @@ import {
 } from "@/components/ui/table";
 import { Widget } from "@/types";
 import { WidgetConsumer, useWidget } from "@/widget-context";
+import { useEffect } from "react";
+import { api } from "@/store";
+import { Checkbox } from "./ui/checkbox";
 
 export const columns: ColumnDef<Widget>[] = [
+  {
+    id: "select",
+    cell: ({ row, table }) => {
+      const widget = row.original;
+      return (
+        <WidgetConsumer>
+          {(context) => {
+            return (
+              <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => {
+                  table.toggleAllRowsSelected(false);
+                  row.toggleSelected(!!value);
+                  context.dispatch({
+                    type: value ? "widgetSelected" : "widgetDeselected",
+                    payload: widget,
+                  });
+                }}
+                aria-label="Select row"
+              />
+            );
+          }}
+        </WidgetConsumer>
+      );
+    },
+  },
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -90,48 +113,6 @@ export const columns: ColumnDef<Widget>[] = [
       );
     },
   },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const widget = row.original;
-      return (
-        <WidgetConsumer>
-          {({ dispatch }) => {
-            return (
-              <>
-                <div className=" gap-2 hidden group-hover:flex">
-                  <Badge
-                    className="cursor-pointer"
-                    onClick={() => {
-                      dispatch({
-                        payload: widget,
-                        type: "triggerUpdate",
-                      });
-                    }}
-                  >
-                    Edit
-                  </Badge>
-                  <Badge
-                    variant="destructive"
-                    className="cursor-pointer"
-                    onClick={() => {
-                      dispatch({
-                        payload: widget,
-                        type: "triggerDelete",
-                      });
-                    }}
-                  >
-                    Delete
-                  </Badge>
-                </div>
-              </>
-            );
-          }}
-        </WidgetConsumer>
-      );
-    },
-  },
 ];
 
 export const WidgetTable = () => {
@@ -142,7 +123,22 @@ export const WidgetTable = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const { state } = useWidget();
+  const { state, dispatch } = useWidget();
+
+  const loadWidgets = async () => {
+    await api.getWidgets().then((widgets) => {
+      if (widgets.length > 0) {
+        dispatch({
+          type: "init",
+          payload: widgets,
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadWidgets();
+  }, []);
 
   const table = useReactTable({
     data: state.widgets,
@@ -165,35 +161,7 @@ export const WidgetTable = () => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <div className="flex items-center py-4"></div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -238,7 +206,7 @@ export const WidgetTable = () => {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  No widgets.
                 </TableCell>
               </TableRow>
             )}
