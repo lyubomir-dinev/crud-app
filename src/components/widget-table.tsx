@@ -13,10 +13,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+
 import {
   Table,
   TableBody,
@@ -25,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Widget } from "@/types";
+import { Widget } from "../../common/types";
 import { WidgetConsumer, useWidget } from "@/widget-context";
 import { useEffect } from "react";
 import { api } from "@/store";

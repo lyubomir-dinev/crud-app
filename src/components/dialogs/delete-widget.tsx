@@ -1,4 +1,4 @@
-import { Widget } from "@/types";
+import { Widget } from "../../../common/types";
 import {
   Button,
   Dialog,

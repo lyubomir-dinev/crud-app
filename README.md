@@ -14,7 +14,11 @@ To run the app - navigate to the root folder and run
 yarn dev
 ```
 
-This will load the **json-server** as http://localhost:3000 and the web app as http://localhost:3001
+This will load:
+
+- **json-server** as http://localhost:3001
+- **web app** as http://localhost:3000
+- **back end** as http://localhost:3002
 
 The database is stored as a JSON file in
 

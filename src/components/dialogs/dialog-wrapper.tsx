@@ -2,7 +2,7 @@ import { useWidget } from "@/widget-context";
 import { useEffect, useState } from "react";
 import { DeleteWidget } from "./delete-widget";
 import { EditWidget } from "./edit-widget";
-import { Widget } from "@/types";
+import { Widget } from "../../../common/types";
 import { CreateWidget } from "./create-widget";
 
 export const DialogWrapper = () => {

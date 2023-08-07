@@ -5,7 +5,7 @@ import {
   WidgetDispatch,
   Widget,
   Widgets,
-} from "./types";
+} from "../common/types";
 import { api } from "./store";
 
 export const WidgetContext = createContext<
