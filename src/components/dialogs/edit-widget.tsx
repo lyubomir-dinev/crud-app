@@ -60,6 +60,7 @@ export const EditWidget = () => {
           onClick={() => {
             setOpen(true);
           }}
+          id="update-widget-trigger"
         >
           Edit Widget
         </Button>
@@ -94,7 +95,7 @@ export const EditWidget = () => {
                   <FormItem itemType="">
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Widget" {...field} />
+                      <Input placeholder="Widget" {...field} id="name" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +108,7 @@ export const EditWidget = () => {
                   <FormItem>
                     <FormLabel>Manufacturer</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} id="manufacturer" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -120,14 +121,21 @@ export const EditWidget = () => {
                   <FormItem>
                     <FormLabel>Stock level</FormLabel>
                     <FormControl>
-                      <Input placeholder="0" {...field} type="number" />
+                      <Input
+                        placeholder="0"
+                        {...field}
+                        type="number"
+                        id="stockLevel"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <div className="flex gap-2">
-                <Button type="submit">Submit</Button>
+                <Button type="submit" id="update-widget-dialog-submit">
+                  Submit
+                </Button>
                 <Button variant="outline" onClick={() => setOpen(false)}>
                   Cancel
                 </Button>

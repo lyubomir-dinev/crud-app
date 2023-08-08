@@ -8,6 +8,7 @@
     "db:dev": "json-server --watch json-server/db.json -p 3001",
     "dev": "concurrently \"npm run next:dev\" \"npm run db:dev\" \"npm run api:dev\"",
     "build": "next build",
+    "test": "cypress run  --record --spec \"cypress/e2e/e2e-test.cy.js\"  --key 1fcde728-a9d3-4ee7-bf78-5efd00bdbc7c",
     "start": "next start",
     "lint": "next lint"
   },
@@ -53,6 +54,7 @@
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@typescript-eslint/parser": "^5.0.1",
+    "cypress": "^12.17.3",
     "prettier": "^2.5.1"
   }
 }

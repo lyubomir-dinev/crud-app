@@ -1,6 +1,6 @@
 "use client";
 
-import { CreateWidget, WidgetTable } from "@/components";
+import { WidgetTable } from "@/components";
 import { DialogWrapper } from "@/components/dialogs/dialog-wrapper";
 import { WidgetProvider } from "@/widget-context";
 

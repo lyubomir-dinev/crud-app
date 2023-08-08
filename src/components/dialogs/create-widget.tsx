@@ -8,7 +8,6 @@ import {
   DialogDescription,
   Input,
 } from "..";
-import { useWidget } from "@/widget-context";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -19,6 +18,7 @@ import {
   FormControl,
   FormMessage,
 } from "../ui/form";
+import { useWidget } from "@/widget-context";
 
 export const CreateWidget = () => {
   const { dispatch } = useWidget();
@@ -43,11 +43,18 @@ export const CreateWidget = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"outline"} className="rounded">
+        <Button
+          id="create-widget-trigger"
+          variant={"outline"}
+          className="rounded"
+        >
           Create Widget
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] border rounded">
+      <DialogContent
+        className="sm:max-w-[425px] border rounded"
+        id="create-widget-dialog-content"
+      >
         <DialogHeader>
           <DialogTitle>Widget information</DialogTitle>
           <DialogDescription>
@@ -75,7 +82,7 @@ export const CreateWidget = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Widget" {...field} />
+                    <Input placeholder="Widget" {...field} id="name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -88,7 +95,7 @@ export const CreateWidget = () => {
                 <FormItem>
                   <FormLabel>Manufacturer</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} id="manufacturer" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -101,13 +108,20 @@ export const CreateWidget = () => {
                 <FormItem>
                   <FormLabel>Stock level</FormLabel>
                   <FormControl>
-                    <Input placeholder="0" {...field} type="number" />
+                    <Input
+                      placeholder="0"
+                      {...field}
+                      type="number"
+                      id="stockLevel"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" id="create-widget-dialog-submit">
+              Submit
+            </Button>
           </form>
         </FormProvider>
       </DialogContent>

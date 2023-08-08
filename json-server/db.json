@@ -1,22 +1,3 @@
 {
-  "widgets": [
-    {
-      "name": "asdasd123",
-      "manufacturer": "asd",
-      "stockLevel": 123,
-      "id": "61956b2c-a0a5-40e0-9e0f-0aeb0a445a54"
-    },
-    {
-      "name": "dddasssdasd",
-      "manufacturer": "dddsadsad",
-      "stockLevel": 123123123123123,
-      "id": "1346ff44-e556-45a1-a05c-02364b65309f"
-    },
-    {
-      "name": "asdasd123",
-      "manufacturer": "asd",
-      "stockLevel": 123,
-      "id": "a80e3567-f394-48dc-bd85-384cecf13991"
-    }
-  ]
+  "widgets": []
 }

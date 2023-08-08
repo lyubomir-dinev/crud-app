@@ -40,3 +40,7 @@ I've used the [**express**](https://www.npmjs.com/package/express) package to pr
 ## DB
 
 Provided by [**json-server**](https://www.npmjs.com/package/json-server) - which is a simple json based DB. For this particular task, there's no need to over complicate the DB by implementing a relational DB.
+
+## Testing
+
+I've used [**cypress**](https://www.npmjs.com/package/cypress) to run e2e tests

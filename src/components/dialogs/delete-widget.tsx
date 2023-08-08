@@ -25,6 +25,7 @@ export const DeleteWidget = () => {
           className="rounded"
           disabled={widget == null || widget == undefined}
           onClick={() => setOpen(true)}
+          id="delete-widget-trigger"
         >
           Delete Widget
         </Button>
@@ -50,6 +51,7 @@ export const DeleteWidget = () => {
                   });
                   setOpen(false);
                 }}
+                id="delete-widget-confirm"
               >
                 Yes
               </Button>
