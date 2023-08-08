@@ -1,17 +1,21 @@
-## Dependencies
+# Dependencies
 
 - [json-server](https://www.npmjs.com/package/json-server)
 
-To install it run
+### To install it run
 
 ```bash
 npm install -g json-server
 ```
 
-To run the app - navigate to the root folder and run
+# App
+
+### To run the app
+
+Navigate to the root folder and run
 
 ```bash
-yarn dev
+yarn && yarn dev
 ```
 
 This will load:
@@ -20,10 +24,20 @@ This will load:
 - **web app** as http://localhost:3000
 - **back end** as http://localhost:3002
 
-The database is stored as a JSON file in
+### The database is stored as a JSON file in
 
 ```
 json-server/db.json
 ```
 
-To browse the DB -> navigate to http://localhost:3001/widgets
+### To browse the DB
+
+Navigate to http://localhost:3001/widgets
+
+### To run the tests
+
+Make sure the app is already running before you run the tests by executing in the root folder of the app.
+
+```bash
+yarn test
+```
