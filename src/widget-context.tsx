@@ -5,6 +5,7 @@ import {
   WidgetDispatch,
   Widget,
   Widgets,
+  WidgetMutable,
 } from "../common/types";
 import { api } from "./store";
 
@@ -27,7 +28,7 @@ function widgetReducer(
         widgets: action.payload as Widgets,
       };
     case "create":
-      api.createWidget(action.payload as Widget);
+      api.createWidget(action.payload as WidgetMutable);
       return {
         ...state,
         widgets: [...state.widgets, action.payload as Widget],

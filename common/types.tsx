@@ -5,6 +5,8 @@ export type Widget = {
   stockLevel: number;
 };
 
+export type WidgetMutable = Partial<Widget>;
+
 export type Widgets = Widget[];
 
 export type WidgetDispatchActionType =
@@ -17,7 +19,7 @@ export type WidgetDispatchActionType =
 
 export type WidgetDispatchAction = {
   type: WidgetDispatchActionType;
-  payload: Widget | Widgets;
+  payload: WidgetMutable | Widget | Widgets;
 };
 
 export type WidgetDispatch = (action: WidgetDispatchAction) => void;

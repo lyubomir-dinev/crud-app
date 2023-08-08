@@ -8,7 +8,6 @@ import {
   DialogDescription,
   Input,
 } from "..";
-import { v4 as uuidv4 } from "uuid";
 import { useWidget } from "@/widget-context";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -62,7 +61,6 @@ export const CreateWidget = () => {
                 payload: {
                   ...values,
                   stockLevel: Number.parseInt(values.stockLevel),
-                  id: uuidv4(),
                 },
                 type: "create",
               });

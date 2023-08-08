@@ -1,10 +1,10 @@
-import { Widget, Widgets } from "../../common/types";
-const db = "http://localhost:3002";
+import { Widget, WidgetMutable, Widgets } from "../../common/types";
+const API_URL = "http://localhost:3002";
 
 export const api = {
   getWidgets: async (): Promise<Widgets> => {
     try {
-      return fetch(`${db}/getWidgets`, {
+      return fetch(`${API_URL}/getWidgets`, {
         mode: "cors",
       })
         .then((res) => {
@@ -21,8 +21,8 @@ export const api = {
       return [];
     }
   },
-  createWidget: async (widget: Widget): Promise<Widget> => {
-    return fetch(`${db}/createWidget`, {
+  createWidget: async (widget: WidgetMutable): Promise<Widget> => {
+    return fetch(`${API_URL}/createWidget`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -34,7 +34,7 @@ export const api = {
       .then((json) => json as Widget);
   },
   updateWidget: async (widget: Widget): Promise<Widget> => {
-    return fetch(`${db}/updateWidget/${widget.id}`, {
+    return await fetch(`${API_URL}/updateWidget`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -46,11 +46,11 @@ export const api = {
       .then((json) => json as Widget);
   },
   deleteWidget: async (widget: Widget): Promise<boolean> => {
-    return fetch(`${db}/deleteWidget/${widget.id}`, {
+    return fetch(`${API_URL}/deleteWidget/${widget.id}`, {
       method: "DELETE",
       mode: "cors",
     })
-      .then(() => true)
-      .catch(() => false);
+      .then((res) => res.json())
+      .then((json) => json.success as boolean);
   },
 };
