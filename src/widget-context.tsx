@@ -1,4 +1,4 @@
-import { useReducer, createContext, useContext, ReactNode } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import {
   WidgetState,
   WidgetDispatchAction,
@@ -17,10 +17,10 @@ export const WidgetContext = createContext<
   | undefined
 >(undefined);
 
-function widgetReducer(
+async function widgetReducer(
   state: WidgetState,
   action: WidgetDispatchAction
-): WidgetState {
+): Promise<WidgetState> {
   switch (action.type) {
     case "init":
       return {
@@ -28,27 +28,34 @@ function widgetReducer(
         widgets: action.payload as Widgets,
       };
     case "create":
-      api.createWidget(action.payload as WidgetMutable);
+      const createdWidget = await api.createWidget(
+        action.payload as WidgetMutable
+      );
       return {
         ...state,
-        widgets: [...state.widgets, action.payload as Widget],
+        widgets: [...state.widgets, createdWidget],
       };
     case "update":
-      api.updateWidget(action.payload as Widget);
+      const updatedWidget = await api.updateWidget(action.payload as Widget);
       return {
         ...state,
         widgets: state.widgets.map((w) =>
-          w.id == (action.payload as Widget).id ? (action.payload as Widget) : w
+          w.id == updatedWidget.id ? updatedWidget : w
         ),
         selectedWidget: action.payload as Widget,
       };
     case "delete":
-      api.deleteWidget(action.payload as Widget);
+      const success = await api.deleteWidget(action.payload as Widget);
+      if (success) {
+        return {
+          ...state,
+          widgets: state.widgets.filter(
+            (w) => w.id != (action.payload as Widget).id
+          ),
+        };
+      }
       return {
         ...state,
-        widgets: state.widgets.filter(
-          (w) => w.id != (action.payload as Widget).id
-        ),
       };
     case "widgetSelected":
       return {
@@ -68,7 +75,12 @@ type WidgetProviderProps = {
 };
 
 function WidgetProvider({ children }: WidgetProviderProps) {
-  const [state, dispatch] = useReducer(widgetReducer, { widgets: [] });
+  const [state, setState] = useState<WidgetState>({ widgets: [] });
+
+  const dispatch: WidgetDispatch = async (action) => {
+    const result = await widgetReducer(state, action);
+    setState(result);
+  };
 
   const value = { state, dispatch };
 
