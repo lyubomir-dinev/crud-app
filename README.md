@@ -26,4 +26,4 @@ The database is stored as a JSON file in
 json-server/db.json
 ```
 
-To browse the DB -> navigate to http://localhost:3000/widgets
+To browse the DB -> navigate to http://localhost:3001/widgets
