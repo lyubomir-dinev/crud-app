@@ -28,7 +28,7 @@ import {
 import { Widget } from "../../common/types";
 import { WidgetConsumer, useWidget } from "@/widget-context";
 import { useEffect } from "react";
-import { api } from "@/store";
+import { api } from "@/effects";
 import { Checkbox } from "./ui/checkbox";
 
 export const columns: ColumnDef<Widget>[] = [

@@ -1,13 +1,26 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import {
-  WidgetState,
-  WidgetDispatchAction,
-  WidgetDispatch,
-  Widget,
-  Widgets,
-  WidgetMutable,
-} from "../common/types";
-import { api } from "./store";
+import { Widget, Widgets, WidgetMutable } from "../common/types";
+import { api } from "./effects";
+
+export type WidgetDispatchActionType =
+  | "init"
+  | "create"
+  | "update"
+  | "delete"
+  | "widgetSelected"
+  | "widgetDeselected";
+
+export type WidgetDispatchAction = {
+  type: WidgetDispatchActionType;
+  payload: WidgetMutable | Widget | Widgets;
+};
+
+export type WidgetDispatch = (action: WidgetDispatchAction) => void;
+
+export type WidgetState = {
+  widgets: Widgets;
+  selectedWidget?: Widget;
+};
 
 export const WidgetContext = createContext<
   | {
